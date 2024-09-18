@@ -1,30 +1,53 @@
 ﻿using Application.Interfaces;
+using Contract.Medico.Request;
+using Contract.MedicosModel.Response;
 using Domain.Entities;
+using Domain.Enum;
 using Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
     public class MedicoService : IMedicoService
     {
         private readonly IMedicoRepository _medicoRepository;
+
         public MedicoService(IMedicoRepository medicoRepository)
         {
             _medicoRepository = medicoRepository;
         }
 
-        public void CreateMedico(Medico medico)
+        public void CreateMedico(CreateMedicoRequest medico)
         {
-            _medicoRepository.AddMedico(medico);
+            var oMedico = new Medico();
+
+            oMedico.Id = medico.Id;
+            oMedico.Nombre = medico.Nombre;
+            oMedico.Apellido = medico.Apellido;
+            oMedico.FechaNacimiento = medico.FechaNacimiento;
+            oMedico.Direccion = medico.Direccion;
+            oMedico.Telefono = medico.Telefono;
+            oMedico.Especialidad = Especialidad.Traumatologo;
+
+            _medicoRepository.AddMedico(oMedico);
         }
 
-        public List<Medico> GetAllMedico()
+        public List<MedicoResponse> GetAllMedico()
         {
-            return _medicoRepository.GetMedicos();
+            var medicos = _medicoRepository.GetMedicos();
+            var mediosResponse = new List<MedicoResponse>();
+
+            foreach (var medico in medicos)
+            {
+                var medicoResp = new MedicoResponse();
+                medicoResp.Nombre = medico.Nombre;
+                medicoResp.Apellido = medico.Apellido;
+                medicoResp.FechaNacimiento = medico.FechaNacimiento;
+
+                mediosResponse.Add(medicoResp);
+            }
+
+
+            return mediosResponse;
         }
     }
 }
