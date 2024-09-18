@@ -1,15 +1,12 @@
-﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Contract.Medico.Request;
+using Contract.MedicosModel.Response;
+using Domain.Entities;
 
 namespace Application.Interfaces
 {
     public interface IMedicoService
     {
-        void CreateMedico(Medico medico);
-        List<Medico> GetAllMedico();
+        void CreateMedico(CreateMedicoRequest medico);
+        List<MedicoResponse> GetAllMedico();
     }
 }
