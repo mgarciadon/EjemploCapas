@@ -1,15 +1,10 @@
 ﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Domain.Interfaces
+namespace Domain.Interfaces;
+
+public interface IMedicoRepository
 {
-    public interface IMedicoRepository
-    {
-        void AddMedico(Medico entity);
-        List<Medico> GetMedicos();
-    }
+    void Create(Medico entity);
+    List<Medico> GetAll();
+    Medico? GetById(int id);
 }

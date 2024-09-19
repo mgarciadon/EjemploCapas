@@ -1,53 +1,53 @@
 ﻿using Application.Interfaces;
+using Contract.Mappings;
 using Contract.Medico.Request;
 using Contract.MedicosModel.Response;
-using Domain.Entities;
-using Domain.Enum;
 using Domain.Interfaces;
 
-namespace Application.Services
+namespace Application.Services;
+
+public class MedicoService : IMedicoService
 {
-    public class MedicoService : IMedicoService
+    private readonly IMedicoRepository _medicoRepository;
+
+    public MedicoService(IMedicoRepository medicoRepository)
     {
-        private readonly IMedicoRepository _medicoRepository;
+        _medicoRepository = medicoRepository;
+    }
 
-        public MedicoService(IMedicoRepository medicoRepository)
+    public MedicoResponse Create(CreateMedicoRequest medico)
+    {
+        var oMedico = MedicosProfile.ToMedicoEntity(medico);
+
+        _medicoRepository.Create(oMedico);
+
+        return MedicosProfile.ToMedicoResponse(oMedico);
+    }
+
+    public List<MedicoResponse> GetAll()
+    {
+        var medicos = _medicoRepository.GetAll();
+        var mediosResponse = new List<MedicoResponse>();
+
+        foreach (var medico in medicos)
         {
-            _medicoRepository = medicoRepository;
+            var medicoResp = MedicosProfile.ToMedicoResponse(medico);
+
+            mediosResponse.Add(medicoResp);
         }
 
-        public void CreateMedico(CreateMedicoRequest medico)
+        return mediosResponse;
+    }
+
+    public MedicoResponse? GetById(int id)
+    {
+        var medico = _medicoRepository.GetById(id);
+
+        if (medico is null)
         {
-            var oMedico = new Medico();
-
-            oMedico.Id = medico.Id;
-            oMedico.Nombre = medico.Nombre;
-            oMedico.Apellido = medico.Apellido;
-            oMedico.FechaNacimiento = medico.FechaNacimiento;
-            oMedico.Direccion = medico.Direccion;
-            oMedico.Telefono = medico.Telefono;
-            oMedico.Especialidad = Especialidad.Traumatologo;
-
-            _medicoRepository.AddMedico(oMedico);
+            return null;
         }
 
-        public List<MedicoResponse> GetAllMedico()
-        {
-            var medicos = _medicoRepository.GetMedicos();
-            var mediosResponse = new List<MedicoResponse>();
-
-            foreach (var medico in medicos)
-            {
-                var medicoResp = new MedicoResponse();
-                medicoResp.Nombre = medico.Nombre;
-                medicoResp.Apellido = medico.Apellido;
-                medicoResp.FechaNacimiento = medico.FechaNacimiento;
-
-                mediosResponse.Add(medicoResp);
-            }
-
-
-            return mediosResponse;
-        }
+        return MedicosProfile.ToMedicoResponse(medico);
     }
 }
