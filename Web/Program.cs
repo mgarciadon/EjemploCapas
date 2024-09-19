@@ -2,6 +2,8 @@ using Application.Interfaces;
 using Application.Services;
 using Domain.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IMedicoRepository, MedicoRepository>();
 builder.Services.AddScoped<IMedicoService, MedicoService>();
+builder.Services.AddDbContext<ExampleDbContext>(x => x.UseSqlite(builder.Configuration.GetConnectionString("ExampleDbConnection")));
 
 #endregion
 

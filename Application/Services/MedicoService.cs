@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Contract.Mappings;
 using Contract.Medico.Request;
 using Contract.MedicosModel.Response;
 using Domain.Entities;
@@ -18,17 +19,9 @@ namespace Application.Services
 
         public void CreateMedico(CreateMedicoRequest medico)
         {
-            var oMedico = new Medico();
+            var medicoEntity = MedicosProfile.ToMedicoEntity(medico);
 
-            oMedico.Id = medico.Id;
-            oMedico.Nombre = medico.Nombre;
-            oMedico.Apellido = medico.Apellido;
-            oMedico.FechaNacimiento = medico.FechaNacimiento;
-            oMedico.Direccion = medico.Direccion;
-            oMedico.Telefono = medico.Telefono;
-            oMedico.Especialidad = Especialidad.Traumatologo;
-
-            _medicoRepository.AddMedico(oMedico);
+            _medicoRepository.AddMedico(medicoEntity);
         }
 
         public List<MedicoResponse> GetAllMedico()
@@ -38,10 +31,7 @@ namespace Application.Services
 
             foreach (var medico in medicos)
             {
-                var medicoResp = new MedicoResponse();
-                medicoResp.Nombre = medico.Nombre;
-                medicoResp.Apellido = medico.Apellido;
-                medicoResp.FechaNacimiento = medico.FechaNacimiento;
+                var medicoResp = MedicosProfile.ToMedicoResponse(medico);
 
                 mediosResponse.Add(medicoResp);
             }

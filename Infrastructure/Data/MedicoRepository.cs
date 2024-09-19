@@ -1,20 +1,27 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
+using Infrastructure.Persistence;
 
 namespace Infrastructure.Data
 {
     public class MedicoRepository : IMedicoRepository
     {
-        public static List<Medico> Medicos = new List<Medico>();
+        private readonly ExampleDbContext _context;
+        
+        public MedicoRepository(ExampleDbContext context)
+        {
+            _context = context;
+        }
 
         public void AddMedico(Medico entity)
         {
-            Medicos.Add(entity);
+            _context.Medicos.Add(entity);
+            _context.SaveChanges();
         }
 
         public List<Medico> GetMedicos()
         {
-            return Medicos;
+            return _context.Medicos.ToList();
         }
     }
 }
