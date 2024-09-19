@@ -39,5 +39,21 @@ namespace Application.Services
 
             return mediosResponse;
         }
+
+        public List<MedicoResponse> GetMedicosByEspecialidad(Especialidad especialidad)
+        {
+            var medicos = _medicoRepository.GetMedicosByEspecialidad(especialidad);
+            var mediosResponse = new List<MedicoResponse>();
+
+            foreach (var medico in medicos)
+            {
+                var medicoResp = MedicosProfile.ToMedicoResponse(medico);
+
+                mediosResponse.Add(medicoResp);
+            }
+
+
+            return mediosResponse;
+        }
     }
 }

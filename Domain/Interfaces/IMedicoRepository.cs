@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Domain.Interfaces
     {
         void AddMedico(Medico entity);
         List<Medico> GetMedicos();
+        List<Medico> GetMedicosByEspecialidad(Especialidad especialidad);
     }
 }

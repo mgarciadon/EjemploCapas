@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Contract.Medico.Request;
 using Domain.Entities;
+using Domain.Enum;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -29,5 +30,10 @@ namespace Web.Controllers
             return Ok(_medicoService.GetAllMedico());
         }
 
+        [HttpGet("ByEspecialidad")]
+        public IActionResult GetMedicoByEspecialidad(Especialidad especialidad)
+        {
+            return Ok(_medicoService.GetMedicosByEspecialidad(especialidad));
+        }
     }
 }

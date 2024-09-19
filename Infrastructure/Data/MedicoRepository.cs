@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enum;
 using Domain.Interfaces;
 using Infrastructure.Persistence;
 
@@ -22,6 +23,11 @@ namespace Infrastructure.Data
         public List<Medico> GetMedicos()
         {
             return _context.Medicos.ToList();
+        }
+
+        public List<Medico> GetMedicosByEspecialidad(Especialidad especialidad)
+        {
+            return _context.Medicos.Where(medico => medico.Especialidad == especialidad).ToList();
         }
     }
 }
