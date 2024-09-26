@@ -1,12 +1,11 @@
 ﻿using Contract.Medico.Request;
 using Contract.MedicosModel.Response;
-using Domain.Entities;
 
-namespace Application.Interfaces
+namespace Application.Interfaces;
+
+public interface IMedicoService
 {
-    public interface IMedicoService
-    {
-        void CreateMedico(CreateMedicoRequest medico);
-        List<MedicoResponse> GetAllMedico();
-    }
+    MedicoResponse Create(CreateMedicoRequest medico);
+    List<MedicoResponse> GetAll();
+    MedicoResponse? GetById(int id);
 }
