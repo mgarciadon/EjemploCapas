@@ -1,14 +1,15 @@
 ﻿using Contract.Medico.Request;
 using Contract.MedicosModel.Response;
-using Domain.Entities;
 using Domain.Enum;
 
-namespace Application.Interfaces
+namespace Application.Interfaces;
+
+public interface IMedicoService
 {
-    public interface IMedicoService
-    {
-        void CreateMedico(CreateMedicoRequest medico);
-        List<MedicoResponse> GetAllMedico();
-        List<MedicoResponse> GetMedicosByEspecialidad(Especialidad especialidad);
-    }
+    List<MedicoResponse> GetAllMedico();
+    MedicoResponse? GetMedicoById(int id);
+    List<MedicoResponse> GetMedicosByEspecialidad(Especialidad especialidad);
+    void CreateMedico(MedicoRequest medico);
+    bool UpdateMedico(int id, MedicoRequest medico);
+    bool DeleteMedico(int id);
 }

@@ -1,17 +1,14 @@
 ﻿using Domain.Entities;
 using Domain.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Domain.Interfaces
+namespace Domain.Interfaces;
+
+public interface IMedicoRepository
 {
-    public interface IMedicoRepository
-    {
-        void AddMedico(Medico entity);
-        List<Medico> GetMedicos();
-        List<Medico> GetMedicosByEspecialidad(Especialidad especialidad);
-    }
+    List<Medico> GetMedicos();
+    Medico? GetMedicoById(int id);
+    List<Medico> GetMedicosByEspecialidad(Especialidad especialidad);
+    void AddMedico(Medico entity);
+    void UpdateMedico(Medico entity);
+    void DeleteMedico(Medico entity);
 }

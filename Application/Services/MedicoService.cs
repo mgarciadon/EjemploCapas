@@ -6,54 +6,94 @@ using Domain.Entities;
 using Domain.Enum;
 using Domain.Interfaces;
 
-namespace Application.Services
+namespace Application.Services;
+
+public class MedicoService : IMedicoService
 {
-    public class MedicoService : IMedicoService
+    private readonly IMedicoRepository _medicoRepository;
+
+    public MedicoService(IMedicoRepository medicoRepository)
     {
-        private readonly IMedicoRepository _medicoRepository;
+        _medicoRepository = medicoRepository;
+    }
 
-        public MedicoService(IMedicoRepository medicoRepository)
-        {
-            _medicoRepository = medicoRepository;
-        }
-
-        public void CreateMedico(CreateMedicoRequest medico)
-        {
-            var medicoEntity = MedicosProfile.ToMedicoEntity(medico);
-
-            _medicoRepository.AddMedico(medicoEntity);
-        }
-
-        public List<MedicoResponse> GetAllMedico()
+    public List<MedicoResponse> GetAllMedico()
+    {
+        try
         {
             var medicos = _medicoRepository.GetMedicos();
-            var mediosResponse = new List<MedicoResponse>();
+            var nombre = medicos[2].Nombre;
 
-            foreach (var medico in medicos)
-            {
-                var medicoResp = MedicosProfile.ToMedicoResponse(medico);
-
-                mediosResponse.Add(medicoResp);
-            }
-
-
-            return mediosResponse;
+            return MedicosProfile.ToMedicoResponse(medicos);
         }
-
-        public List<MedicoResponse> GetMedicosByEspecialidad(Especialidad especialidad)
+        catch (Exception e)
         {
-            var medicos = _medicoRepository.GetMedicosByEspecialidad(especialidad);
-            var mediosResponse = new List<MedicoResponse>();
-
-            foreach (var medico in medicos)
-            {
-                var medicoResp = MedicosProfile.ToMedicoResponse(medico);
-
-                mediosResponse.Add(medicoResp);
-            }
-
-
-            return mediosResponse;
+            Console.WriteLine($"Error en la clase {nameof(MedicoService)} - STACKTRACE: {e.StackTrace} - MESSAGE {e.Message}");
+            throw e;
         }
+    }
+
+    public MedicoResponse? GetMedicoById(int id)
+    {
+        var medico = _medicoRepository.GetMedicoById(id);
+
+        if (medico != null)
+        {
+            return MedicosProfile.ToMedicoResponse(medico);
+        }
+
+        return null;
+    }
+
+    public List<MedicoResponse> GetMedicosByEspecialidad(Especialidad especialidad)
+    {
+        var medicos = _medicoRepository.GetMedicosByEspecialidad(especialidad);
+
+        return MedicosProfile.ToMedicoResponse(medicos);
+    }
+
+    public void CreateMedico(MedicoRequest medico)
+    {
+        var medicoEntity = MedicosProfile.ToMedicoEntity(medico);
+
+        _medicoRepository.AddMedico(medicoEntity);
+    }
+
+    public void CreateCita(MedicoRequest medico)
+    {
+        var medicoEntity = MedicosProfile.ToMedicoEntity(medico);
+
+        _medicoRepository.AddMedico(medicoEntity);
+    }
+
+
+    public bool UpdateMedico(int id, MedicoRequest medico)
+    {
+        var medicoEntity = _medicoRepository.GetMedicoById(id);
+
+        if (medicoEntity != null)
+        {
+            MedicosProfile.ToMedicoEntityUpdate(medicoEntity, medico);
+
+            _medicoRepository.UpdateMedico(medicoEntity);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool DeleteMedico(int id)
+    {
+        var medico = _medicoRepository.GetMedicoById(id);
+
+        if (medico != null)
+        {
+            _medicoRepository.DeleteMedico(medico);
+
+            return true;
+        }
+
+        return false;
     }
 }
