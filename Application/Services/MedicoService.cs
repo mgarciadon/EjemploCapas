@@ -2,7 +2,6 @@
 using Contract.Mappings;
 using Contract.Medico.Request;
 using Contract.MedicosModel.Response;
-using Domain.Entities;
 using Domain.Enum;
 using Domain.Interfaces;
 
