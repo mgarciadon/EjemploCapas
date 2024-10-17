@@ -8,4 +8,6 @@ public abstract class Usuario
     public DateTime FechaNacimiento { get; set; }
     public string Direccion { get; set; } = string.Empty;
     public long Telefono { get; set; }
+    public string Email { get; set; } = string.Empty;
+    public string Contrasenia { get; set; } = string.Empty;
 }

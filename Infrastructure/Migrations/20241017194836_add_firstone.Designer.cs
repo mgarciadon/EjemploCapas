@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ExampleDbContext))]
-    [Migration("20240919181049_fist_migration")]
-    partial class fist_migration
+    [Migration("20241017194836_add_firstone")]
+    partial class add_firstone
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,7 +45,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PacienteId");
 
-                    b.ToTable("Cita");
+                    b.ToTable("Citas");
                 });
 
             modelBuilder.Entity("Domain.Entities.Medico", b =>
@@ -58,7 +58,15 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Contrasenia")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -90,7 +98,15 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Contrasenia")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -106,7 +122,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Paciente");
+                    b.ToTable("Pacientes");
                 });
 
             modelBuilder.Entity("Domain.Entities.Cita", b =>

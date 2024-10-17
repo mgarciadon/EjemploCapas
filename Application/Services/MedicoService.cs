@@ -21,14 +21,13 @@ public class MedicoService : IMedicoService
         try
         {
             var medicos = _medicoRepository.GetMedicos();
-            var nombre = medicos[2].Nombre;
 
             return MedicosProfile.ToMedicoResponse(medicos);
         }
         catch (Exception e)
         {
             Console.WriteLine($"Error en la clase {nameof(MedicoService)} - STACKTRACE: {e.StackTrace} - MESSAGE {e.Message}");
-            throw e;
+            throw new Exception(e.Message);
         }
     }
 
@@ -52,13 +51,6 @@ public class MedicoService : IMedicoService
     }
 
     public void CreateMedico(MedicoRequest medico)
-    {
-        var medicoEntity = MedicosProfile.ToMedicoEntity(medico);
-
-        _medicoRepository.AddMedico(medicoEntity);
-    }
-
-    public void CreateCita(MedicoRequest medico)
     {
         var medicoEntity = MedicosProfile.ToMedicoEntity(medico);
 
