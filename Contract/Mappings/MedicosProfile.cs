@@ -15,7 +15,9 @@ public static class MedicosProfile
             Direccion = request.Direccion,
             FechaNacimiento = request.FechaNacimiento,
             Telefono = request.Telefono,
-            Especialidad = (Especialidad)request.Especialidad
+            Especialidad = (Especialidad)request.Especialidad,
+            Email = request.Email,
+            Contrasenia = request.Contrasenia
         };
     }
 
@@ -37,7 +39,8 @@ public static class MedicosProfile
             Nombre = medico.Nombre,
             Apellido = medico.Apellido,
             FechaNacimiento = medico.FechaNacimiento,
-            Especialidad = medico.Especialidad
+            Especialidad = medico.Especialidad,
+            Email = medico.Email
         };
     }
 
@@ -49,7 +52,8 @@ public static class MedicosProfile
             Nombre = m.Nombre,
             Apellido = m.Apellido,
             FechaNacimiento = m.FechaNacimiento,
-            Especialidad = m.Especialidad
+            Especialidad = m.Especialidad,
+            Email = m.Email
         }).ToList();
     }
 }

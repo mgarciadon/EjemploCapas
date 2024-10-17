@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Application.Services;
+using Contract.UsuariosModel.Helpers;
 using Domain.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Persistence;
@@ -19,6 +20,7 @@ internal class Program
         builder.Services.AddEndpointsApiExplorer();
 
         builder.Services.AddDbContext<ExampleDbContext>(x => x.UseSqlite(builder.Configuration.GetConnectionString("ExampleDbConnection")));
+        builder.Services.Configure<AutenticacionServiceOptions>(builder.Configuration.GetSection("AutenticacionServiceOptions"));
 
         builder.Services.AddSwaggerGen(setupAction =>
         {
@@ -53,9 +55,9 @@ internal class Program
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["AutenticacionService:Issuer"],
-                    ValidAudience = builder.Configuration["AutenticacionService:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["AutenticacionService:SecretForKey"]!))
+                    ValidIssuer = builder.Configuration["AutenticacionServiceOptions:Issuer"],
+                    ValidAudience = builder.Configuration["AutenticacionServiceOptions:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["AutenticacionServiceOptions:SecretForKey"]!))
                 };
             }
         );
