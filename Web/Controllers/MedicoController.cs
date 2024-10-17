@@ -2,6 +2,7 @@
 using Contract.Medico.Request;
 using Contract.MedicosModel.Response;
 using Domain.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers;
@@ -16,8 +17,9 @@ public class MedicoController : ControllerBase
     {
         _medicoService = medicoService;
     }
-
+    
     [HttpGet]
+    [Authorize]
     public IActionResult GetAllMedico()
     {
         var response = _medicoService.GetAllMedico();

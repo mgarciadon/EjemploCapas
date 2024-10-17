@@ -8,4 +8,6 @@ public class MedicoRequest
     public string Direccion { get; set; } = string.Empty;
     public long Telefono { get; set; }
     public int Especialidad { get; set; }
+    public string Email { get; set; } = string.Empty;
+    public string Contrasenia { get; set; } = string.Empty;
 }
