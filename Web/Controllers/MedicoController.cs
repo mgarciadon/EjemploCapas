@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Contract.Medico.Request;
 using Contract.MedicosModel.Response;
+using Domain.Enum;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers;
@@ -17,68 +18,53 @@ public class MedicoController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<MedicoResponse>> GetAllMedico()
+    public IActionResult GetAllMedico()
     {
-        var response = new List<MedicoResponse>();
+        var response = _medicoService.GetAllMedico();
 
-        try
+        if (response.Count is 0)
         {
-            response = _medicoService.GetAll();
-
-            if (response.Count is 0)
-            {
-                return NotFound("No existen registros de medicos");
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
+            return NotFound("No se encontraron medicos");
         }
 
         return Ok(response);
     }
 
     [HttpGet("{id}")]
-    public ActionResult<MedicoResponse> GetMedicoById([FromRoute] int id)
+    public ActionResult<MedicoResponse?> GetMedicoById([FromRoute] int id)
     {
-        var response = new MedicoResponse();
+        var response = _medicoService.GetMedicoById(id);
 
-        try
+        if (response is null)
         {
-            response = _medicoService.GetById(id);
-
-            if (response is null)
-            {
-                return NotFound($"No existe el medico con id {id}");
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
+            return NotFound("No se encontro el medico");
         }
 
         return Ok(response);
     }
 
-    [HttpPost]
-    public IActionResult CreateMedico([FromBody] CreateMedicoRequest medico)
+    [HttpGet("especialidad")]
+    public IActionResult GetMedicoByEspecialidad(Especialidad especialidad)
     {
-        var response = new MedicoResponse();
-        string locationUrl = string.Empty;
+        return Ok(_medicoService.GetMedicosByEspecialidad(especialidad));
+    }
 
-        try
-        {
-            response = _medicoService.Create(medico);
+    [HttpPost]
+    public IActionResult CreateMedico([FromBody] MedicoRequest medico)
+    {
+        _medicoService.CreateMedico(medico);
+        return Ok();
+    }
 
-            string baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            string apiAndEndpointUrl = $"api/medicos/{response.Id}";
-            locationUrl = $"{baseUrl}/{apiAndEndpointUrl}";
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
+    [HttpPut("{id}")]
+    public ActionResult<bool> UpdateMedico([FromRoute] int id, [FromBody] MedicoRequest medico)
+    {
+        return Ok(_medicoService.UpdateMedico(id, medico));
+    }
 
-        return Created(locationUrl, response);
+    [HttpDelete("{id}")]
+    public ActionResult<bool> DeleteMedico([FromRoute] int id)
+    {
+        return Ok(_medicoService.DeleteMedico(id));
     }
 }

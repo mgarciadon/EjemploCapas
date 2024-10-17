@@ -1,10 +1,9 @@
 ﻿using Domain.Enum;
 
-namespace Domain.Entities
+namespace Domain.Entities;
+
+public class Medico : Usuario
 {
-    public class Medico : Usuario
-    {
-        public Especialidad Especialidad { get; set; }
-        public List<Cita> Citas { get; set; } = new();
-    }
+    public Especialidad Especialidad { get; set; }
+    public List<Cita>? Citas { get; set; }
 }

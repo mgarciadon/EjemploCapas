@@ -2,6 +2,7 @@
 using Contract.Mappings;
 using Contract.Medico.Request;
 using Contract.MedicosModel.Response;
+using Domain.Enum;
 using Domain.Interfaces;
 
 namespace Application.Services;
@@ -15,39 +16,83 @@ public class MedicoService : IMedicoService
         _medicoRepository = medicoRepository;
     }
 
-    public MedicoResponse Create(CreateMedicoRequest medico)
+    public List<MedicoResponse> GetAllMedico()
     {
-        var oMedico = MedicosProfile.ToMedicoEntity(medico);
+        try
+        {
+            var medicos = _medicoRepository.GetMedicos();
+            var nombre = medicos[2].Nombre;
 
-        _medicoRepository.Create(oMedico);
-
-        return MedicosProfile.ToMedicoResponse(oMedico);
+            return MedicosProfile.ToMedicoResponse(medicos);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error en la clase {nameof(MedicoService)} - STACKTRACE: {e.StackTrace} - MESSAGE {e.Message}");
+            throw e;
+        }
     }
 
-    public List<MedicoResponse> GetAll()
+    public MedicoResponse? GetMedicoById(int id)
     {
-        var medicos = _medicoRepository.GetAll();
-        var mediosResponse = new List<MedicoResponse>();
+        var medico = _medicoRepository.GetMedicoById(id);
 
-        foreach (var medico in medicos)
+        if (medico != null)
         {
-            var medicoResp = MedicosProfile.ToMedicoResponse(medico);
-
-            mediosResponse.Add(medicoResp);
+            return MedicosProfile.ToMedicoResponse(medico);
         }
 
-        return mediosResponse;
+        return null;
     }
 
-    public MedicoResponse? GetById(int id)
+    public List<MedicoResponse> GetMedicosByEspecialidad(Especialidad especialidad)
     {
-        var medico = _medicoRepository.GetById(id);
+        var medicos = _medicoRepository.GetMedicosByEspecialidad(especialidad);
 
-        if (medico is null)
+        return MedicosProfile.ToMedicoResponse(medicos);
+    }
+
+    public void CreateMedico(MedicoRequest medico)
+    {
+        var medicoEntity = MedicosProfile.ToMedicoEntity(medico);
+
+        _medicoRepository.AddMedico(medicoEntity);
+    }
+
+    public void CreateCita(MedicoRequest medico)
+    {
+        var medicoEntity = MedicosProfile.ToMedicoEntity(medico);
+
+        _medicoRepository.AddMedico(medicoEntity);
+    }
+
+
+    public bool UpdateMedico(int id, MedicoRequest medico)
+    {
+        var medicoEntity = _medicoRepository.GetMedicoById(id);
+
+        if (medicoEntity != null)
         {
-            return null;
+            MedicosProfile.ToMedicoEntityUpdate(medicoEntity, medico);
+
+            _medicoRepository.UpdateMedico(medicoEntity);
+
+            return true;
         }
 
-        return MedicosProfile.ToMedicoResponse(medico);
+        return false;
+    }
+
+    public bool DeleteMedico(int id)
+    {
+        var medico = _medicoRepository.GetMedicoById(id);
+
+        if (medico != null)
+        {
+            _medicoRepository.DeleteMedico(medico);
+
+            return true;
+        }
+
+        return false;
     }
 }

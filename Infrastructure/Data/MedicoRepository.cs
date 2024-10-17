@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enum;
 using Domain.Interfaces;
 using Infrastructure.Persistence;
 
@@ -6,26 +7,43 @@ namespace Infrastructure.Data;
 
 public class MedicoRepository : IMedicoRepository
 {
-    private readonly ExampleDbContext _dbContext;
+    private readonly ExampleDbContext _context;
 
-    public MedicoRepository(ExampleDbContext dbContext)
+    public MedicoRepository(ExampleDbContext context)
     {
-        _dbContext = dbContext;
+        _context = context;
     }
 
-    public void Create(Medico entity)
+    public List<Medico> GetMedicos()
     {
-        _dbContext.Medicos.Add(entity);
-        _dbContext.SaveChanges();
+        return _context.Medicos.ToList();
     }
 
-    public List<Medico> GetAll()
+    public Medico? GetMedicoById(int id)
     {
-        return _dbContext.Medicos.ToList();
+        return _context.Medicos.FirstOrDefault(x => x.Id.Equals(id));
     }
 
-    public Medico? GetById(int id)
+    public List<Medico> GetMedicosByEspecialidad(Especialidad especialidad)
     {
-        return _dbContext.Medicos.FirstOrDefault(m => m.Id.Equals(id));
+        return _context.Medicos.Where(medico => medico.Especialidad == especialidad).ToList();
+    }
+
+    public void AddMedico(Medico entity)
+    {
+        _context.Medicos.Add(entity);
+        _context.SaveChanges();
+    }
+
+    public void UpdateMedico(Medico entity)
+    {
+        _context.Medicos.Update(entity);
+        _context.SaveChanges();
+    }
+
+    public void DeleteMedico(Medico medico)
+    {
+        _context.Medicos.Remove(medico);
+        _context.SaveChanges();
     }
 }
